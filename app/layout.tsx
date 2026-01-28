@@ -58,12 +58,12 @@ export default function RootLayout({
 			suppressHydrationWarning
 			className={cn(GeistSans.variable, GeistMono.variable)}
 		>
-			<body className="antialiased">
+			<body className="antialiased overscroll-none">
 				<Providers>
-					<div className="w-full min-h-screen relative">
+					<div className="w-full min-h-lvh relative">
 						<GradientBackground>
 							<div
-								className="fixed w-screen h-screen opacity-30"
+								className="fixed w-lvw h-lvh opacity-30"
 								style={{
 									backgroundImage: `radial-gradient(rgba(192, 132, 252, .2) 2px, transparent 0)`,
 									backgroundSize: "15px 15px",
@@ -71,12 +71,12 @@ export default function RootLayout({
 									maskImage: `radial-gradient(ellipse at center, rgba(0, 0, 0, 1), transparent 75%)`,
 								}}
 							/>
-							<div className="fixed w-screen h-screen flex items-center justify-center opacity-10">
+							<div className="fixed w-lvw h-lvh flex items-center justify-center opacity-10">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									version="1.1"
 									viewBox="0 0 2000 2000"
-									className="w-screen h-screen invert dark:filter-none"
+									className="w-lvw h-lvh invert dark:filter-none"
 									preserveAspectRatio="xMinYMin slice"
 								>
 									<defs>
@@ -152,7 +152,7 @@ export default function RootLayout({
 								</svg>
 							</div>
 							<div className="relative z-10 w-full">
-								<main className="min-w-0 min-h-screen flex flex-col px-2 md:px-0 mx-2 lg:mx-auto pt-12">
+								<main className="min-w-0 min-h-lvh flex flex-col px-2 md:px-0 mx-2 lg:mx-auto pt-12">
 									<Navbar />
 									{children}
 									<Footer />
