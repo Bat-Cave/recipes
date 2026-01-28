@@ -1,6 +1,14 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+export const metadata = {
+	robots: {
+		index: false,
+		follow: false,
+		nocache: true,
+	},
+};
+
 export default function Home() {
 	return (
 		<section className="max-w-xl mx-auto w-full">

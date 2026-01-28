@@ -4,6 +4,14 @@ import { cn } from "@/lib/utils";
 import { categories } from "./[category]/categories";
 import { categoryBackgrounds, getRecipes } from "./utils";
 
+export const metadata = {
+	robots: {
+		index: false,
+		follow: false,
+		nocache: true,
+	},
+};
+
 export default function RecipesPage() {
 	const recipes = getRecipes();
 

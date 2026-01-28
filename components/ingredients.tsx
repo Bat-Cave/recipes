@@ -2,6 +2,7 @@
 
 import Fraction from "fraction.js";
 import { Minus, Plus, RotateCcw } from "lucide-react";
+import { motion } from "motion/react";
 import {
 	ingredients,
 	unitDefinitions,
@@ -22,6 +23,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useRecipeUnitsStore } from "@/stores/recipe-units";
 import { useServingsStore } from "@/stores/servings";
+import { morphTransition, TextMorph } from "./text-morph";
 import { ButtonGroup } from "./ui/button-group";
 
 export const Ingredients = ({
@@ -57,7 +59,7 @@ export const Ingredients = ({
 						Makes{" "}
 						<span
 							className={cn(
-								"font-semibold font-mono text-amber-800 dark:text-amber-400 transition-colors",
+								"font-semibold font-mono text-yellow-800 dark:text-yellow-400 transition-colors",
 								internalServings === servings &&
 									"text-violet-800 dark:text-violet-400",
 							)}
@@ -66,58 +68,12 @@ export const Ingredients = ({
 						</span>{" "}
 						{internalServings > 1 ? servingUnits[1] : servingUnits[0]}
 					</span>
-					{/* <Popover>
-						<PopoverTrigger className="text-sm ml-auto underline text-violet-800/70 dark:text-violet-400/70 hover:text-violet-800 dark:hover:text-violet-400">
-							adjust servings
-						</PopoverTrigger>
-						<PopoverContent side="top" align="start" collisionPadding={16}>
-							<PopoverHeader>
-								<PopoverTitle>Adjust Servings</PopoverTitle>
-								<PopoverDescription>
-									Adjust the number of servings for this recipe. The ingredients
-									and instructions will be adjusted accordingly.
-								</PopoverDescription>
-							</PopoverHeader>
-							<div className="flex items-center gap-2 mt-4">
-								<button
-									className="btn btn-outline btn-animated size-5 shrink-0 p-1 flex items-center justify-center rounded-sm"
-									onClick={() => updateServingAmount(internalServings - 1)}
-									disabled={internalServings <= 1}
-									title="Decrease servings"
-								>
-									<Minus />
-									<span className="sr-only">Decrease servings</span>
-								</button>
-								<p className="font-semibold font-mono my-0!">
-									{internalServings}
-								</p>
-								<button
-									className="btn btn-outline btn-animated size-5 shrink-0 p-1 flex items-center justify-center rounded-sm"
-									onClick={() => updateServingAmount(internalServings + 1)}
-									title="Increase servings"
-								>
-									<Plus />
-									<span className="sr-only">Increase servings</span>
-								</button>
-								{internalServings > 1 ? servingUnits[1] : servingUnits[0]}
-								<button
-									className="btn btn-outline btn-animated size-5 shrink-0 p-1 flex items-center justify-center rounded-sm ml-auto"
-									onClick={() => updateServingAmount(servings)}
-									disabled={internalServings === servings}
-									title="Reset to original servings"
-								>
-									<RotateCcw />
-									<span className="sr-only">Reset to original servings</span>
-								</button>
-							</div>
-						</PopoverContent>
-					</Popover> */}
 					<span className="flex items-center flex-wrap gap-2">
 						<ButtonGroup>
-							<Tooltip delayDuration={500}>
+							<Tooltip>
 								<TooltipTrigger asChild>
 									<button
-										className="btn btn-outline btn-animated hover:z-10 shrink-0 flex items-center justify-center rounded-sm disabled:z-0 z-5"
+										className="btn btn-outline hover:z-10 shrink-0 flex items-center justify-center rounded-sm disabled:z-0 z-5"
 										onClick={() => updateServingAmount(internalServings - 1)}
 										disabled={internalServings <= 1}
 										title="Decrease servings"
@@ -130,25 +86,10 @@ export const Ingredients = ({
 									<p>Decrease servings</p>
 								</TooltipContent>
 							</Tooltip>
-							<Tooltip delayDuration={500}>
+							<Tooltip>
 								<TooltipTrigger asChild>
 									<button
-										className="btn btn-outline btn-animated hover:z-10 shrink-0 flex items-center justify-center rounded-sm disabled:z-0 z-5"
-										onClick={() => updateServingAmount(internalServings + 1)}
-										title="Increase servings"
-									>
-										<Plus className="size-4" />
-										<span className="sr-only">Increase servings</span>
-									</button>
-								</TooltipTrigger>
-								<TooltipContent>
-									<p>Increase servings</p>
-								</TooltipContent>
-							</Tooltip>
-							<Tooltip delayDuration={500}>
-								<TooltipTrigger asChild>
-									<button
-										className="btn btn-outline btn-animated hover:z-10 shrink-0 flex items-center justify-center rounded-sm disabled:z-0 z-5"
+										className="btn btn-outline-warning hover:z-10 shrink-0 flex items-center justify-center rounded-sm disabled:z-0 z-5"
 										onClick={() => updateServingAmount(servings)}
 										title="Reset to original servings"
 										disabled={internalServings === servings}
@@ -161,12 +102,27 @@ export const Ingredients = ({
 									<p>Reset to original servings</p>
 								</TooltipContent>
 							</Tooltip>
-						</ButtonGroup>
-						<ButtonGroup>
-							<Tooltip delayDuration={500}>
+							<Tooltip>
 								<TooltipTrigger asChild>
 									<button
-										className="btn btn-outline btn-animated shrink-0 flex items-center justify-center rounded-sm disabled:z-0 z-10"
+										className="btn btn-outline hover:z-10 shrink-0 flex items-center justify-center rounded-sm disabled:z-0 z-5"
+										onClick={() => updateServingAmount(internalServings + 1)}
+										title="Increase servings"
+									>
+										<Plus className="size-4" />
+										<span className="sr-only">Increase servings</span>
+									</button>
+								</TooltipTrigger>
+								<TooltipContent>
+									<p>Increase servings</p>
+								</TooltipContent>
+							</Tooltip>
+						</ButtonGroup>
+						<ButtonGroup>
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<button
+										className="btn btn-outline-secondary shrink-0 flex items-center justify-center rounded-sm disabled:z-0 z-10"
 										onClick={() => updateUnits("decimal")}
 										disabled={units === "decimal"}
 										title="Decimal"
@@ -194,10 +150,10 @@ export const Ingredients = ({
 									<p>Decimals</p>
 								</TooltipContent>
 							</Tooltip>
-							<Tooltip delayDuration={500}>
+							<Tooltip>
 								<TooltipTrigger asChild>
 									<button
-										className="btn btn-outline btn-animated shrink-0 flex items-center justify-center rounded-sm disabled:z-0 z-10"
+										className="btn btn-outline-secondary shrink-0 flex items-center justify-center rounded-sm disabled:z-0 z-10"
 										onClick={() => updateUnits("fraction")}
 										disabled={units === "fraction"}
 										title="Fraction"
@@ -207,20 +163,13 @@ export const Ingredients = ({
 											width="24"
 											height="24"
 											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											strokeWidth="2"
-											strokeLinecap="round"
-											strokeLinejoin="round"
 											className="size-4"
 										>
-											<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+											<title>Fraction-one-half SVG Icon</title>
 											<path
-												d="M12 3a9 9 0 1 1 -7.795 13.498l7.795 -4.498v-9"
 												fill="currentColor"
-												stroke="none"
+												d="m5.79 21.61l-1.58-1.22l14-18l1.58 1.22zM4 2v2h2v8h2V2zm11 10v2h4v2h-2c-1.1 0-2 .9-2 2v4h6v-2h-4v-2h2c1.11 0 2-.89 2-2v-2a2 2 0 0 0-2-2z"
 											/>
-											<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
 										</svg>
 									</button>
 								</TooltipTrigger>
@@ -230,70 +179,6 @@ export const Ingredients = ({
 							</Tooltip>
 						</ButtonGroup>
 					</span>
-					{/* <Popover>
-						<PopoverTrigger className="text-sm underline text-violet-800/70 dark:text-violet-400/70 hover:text-violet-800 dark:hover:text-violet-400">
-							change units
-						</PopoverTrigger>
-						<PopoverContent side="top" align="start" collisionPadding={16}>
-							<PopoverHeader>
-								<PopoverTitle>Change Units</PopoverTitle>
-								<PopoverDescription>
-									Change how the quantities are displayed for this recipe.
-								</PopoverDescription>
-							</PopoverHeader>
-							<div className="flex items-center gap-2 mt-4">
-								<button
-									className="btn btn-outline btn-animated shrink-0 flex items-center justify-center rounded-sm"
-									onClick={() => updateUnits("decimal")}
-									disabled={units === "decimal"}
-									title="Decimal"
-								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="24"
-										height="24"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										strokeWidth="2"
-										strokeLinecap="round"
-										strokeLinejoin="round"
-									>
-										<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-										<path d="M17 8a2 2 0 0 1 2 2v4a2 2 0 1 1 -4 0v-4a2 2 0 0 1 2 -2" />
-										<path d="M10 8a2 2 0 0 1 2 2v4a2 2 0 1 1 -4 0v-4a2 2 0 0 1 2 -2" />
-										<path d="M5 16h.01" />
-									</svg>
-								</button>
-								<button
-									className="btn btn-outline btn-animated shrink-0 flex items-center justify-center rounded-sm"
-									onClick={() => updateUnits("fraction")}
-									disabled={units === "fraction"}
-									title="Fraction"
-								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="24"
-										height="24"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										strokeWidth="2"
-										strokeLinecap="round"
-										strokeLinejoin="round"
-									>
-										<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-										<path
-											d="M12 3a9 9 0 1 1 -7.795 13.498l7.795 -4.498v-9"
-											fill="currentColor"
-											stroke="none"
-										/>
-										<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
-									</svg>
-								</button>
-							</div>{" "}
-						</PopoverContent>
-					</Popover> */}
 				</div>
 			</div>
 			<ul className="space-y-2">
@@ -312,35 +197,42 @@ export const Ingredients = ({
 						<li key={name} className="lowercase list-none text-lg relative">
 							<span
 								className={cn(
-									"font-semibold font-mono text-amber-800 dark:text-amber-400 transition-colors",
+									"font-semibold transition-all font-mono text-yellow-800 dark:text-yellow-400",
 									internalServings === servings &&
 										"text-violet-800 dark:text-violet-400",
 								)}
 							>
-								{displayQuantity}
+								<TextMorph>{displayQuantity}</TextMorph>
 							</span>{" "}
-							{adjustedQuantity > 1 ? unitDetails?.plural : unitDetails?.name}{" "}
-							{name}{" "}
-							{(alternatives?.length ?? 0) > 0 && (
-								<Popover>
-									<PopoverTrigger className="text-sm underline text-violet-800/70 dark:text-violet-400/70 hover:text-violet-800 dark:hover:text-violet-400">
-										alternatives
-									</PopoverTrigger>
-									<PopoverContent>
-										<PopoverHeader>
-											<PopoverTitle>Alternatives</PopoverTitle>
-											<PopoverDescription className="sr-only">
-												This is a list of alternatives for this ingredient.
-											</PopoverDescription>
-										</PopoverHeader>
-										<ul className="list-disc list-inside mt-4">
-											{alternatives?.map((alternative) => (
-												<li key={alternative}>{alternative}</li>
-											))}
-										</ul>
-									</PopoverContent>
-								</Popover>
-							)}
+							<motion.span
+								layout="position"
+								layoutId={`unit-${name}`}
+								className="inline-block"
+								transition={morphTransition}
+							>
+								{adjustedQuantity > 1 ? unitDetails?.plural : unitDetails?.name}{" "}
+								{name}{" "}
+								{(alternatives?.length ?? 0) > 0 && (
+									<Popover>
+										<PopoverTrigger className="text-sm underline text-violet-800/70 dark:text-violet-400/70 hover:text-violet-800 dark:hover:text-violet-400">
+											alternatives
+										</PopoverTrigger>
+										<PopoverContent>
+											<PopoverHeader>
+												<PopoverTitle>Alternatives</PopoverTitle>
+												<PopoverDescription className="sr-only">
+													This is a list of alternatives for this ingredient.
+												</PopoverDescription>
+											</PopoverHeader>
+											<ul className="list-disc list-inside mt-4">
+												{alternatives?.map((alternative) => (
+													<li key={alternative}>{alternative}</li>
+												))}
+											</ul>
+										</PopoverContent>
+									</Popover>
+								)}
+							</motion.span>
 							<span className="absolute right-full mr-3 flex size-1 bg-black dark:bg-white rounded-full top-3"></span>
 						</li>
 					);
@@ -378,10 +270,21 @@ export const ReactiveIngredient = ({
 	const displayQuantity = units === "decimal" ? decimal : fraction;
 
 	return (
-		<span className="lowercase font-semibold text-violet-800 dark:text-violet-400">
-			{displayQuantity}{" "}
-			{adjustedQuantity > 1 ? unitDetails?.plural : unitDetails?.name}{" "}
-			{!omitName && ingredient.name}
+		<span
+			className={cn(
+				"lowercase font-semibold text-yellow-800 dark:text-yellow-400 transition-colors",
+				internalServings === servings && "text-violet-800 dark:text-violet-400",
+			)}
+		>
+			<TextMorph>{displayQuantity}</TextMorph>{" "}
+			<motion.span
+				layout="position"
+				className="inline-block"
+				transition={morphTransition}
+			>
+				{adjustedQuantity > 1 ? unitDetails?.plural : unitDetails?.name}{" "}
+				{!omitName && ingredient.name}
+			</motion.span>
 		</span>
 	);
 };
@@ -401,7 +304,12 @@ export const ReactiveServings = ({
 	const internalServings = recipeServings[slug] ?? servings;
 
 	return (
-		<span className="font-semibold text-violet-800 dark:text-violet-400">
+		<span
+			className={cn(
+				"lowercase font-semibold text-yellow-800 dark:text-yellow-400 transition-colors",
+				internalServings === servings && "text-violet-800 dark:text-violet-400",
+			)}
+		>
 			{internalServings}{" "}
 			{omitUnit || !servingUnits
 				? ""

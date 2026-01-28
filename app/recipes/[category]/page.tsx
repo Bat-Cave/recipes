@@ -6,6 +6,14 @@ import { cn } from "@/lib/utils";
 import { categoryBackgrounds, getRecipes } from "../utils";
 import { CategorySlug, categories } from "./categories";
 
+export const metadata = {
+	robots: {
+		index: false,
+		follow: false,
+		nocache: true,
+	},
+};
+
 export default async function RecipeCategoriesPage({
 	params,
 }: {

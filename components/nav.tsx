@@ -7,12 +7,18 @@ import { cn } from "@/lib/utils";
 import Logo from "./logo";
 import ThemeSwitch from "./theme-switcher";
 
-const navItems = {
+type NavItem = {
+	name: string;
+	hideOnMobile?: boolean;
+};
+
+const navItems: Record<string, NavItem> = {
 	"/recipes": {
 		name: "Recipes",
 	},
 	"/#acknowledgments": {
 		name: "Acknowledgments",
+		hideOnMobile: true,
 	},
 };
 
@@ -38,7 +44,7 @@ export function Navbar() {
 		<motion.aside
 			style={{ background, backdropFilter }}
 			className={cn(
-				"sticky top-4 w-[calc(100%+24px)] px-3 sm:w-full z-10 max-w-2xl rounded-lg h-12 tracking-tight mb-16 backdrop-blur-sm mx-auto -translate-x-3 sm:translate-x-0",
+				"sticky top-4 w-[calc(100%+24px)] px-3 sm:w-full z-20 max-w-2xl rounded-lg h-12 tracking-tight mb-16 backdrop-blur-sm mx-auto -translate-x-3 sm:translate-x-0",
 			)}
 		>
 			<nav
@@ -51,17 +57,22 @@ export function Navbar() {
 						<span className="sr-only">Home</span>
 					</Link>
 					<div className="flex space-x-1 items-center">
-						{Object.entries(navItems).map(([path, { name }]) => {
-							return (
-								<Link
-									key={path}
-									href={path}
-									className="transition-all text-sm md:text-base hover:text-neutral-800 dark:hover:text-neutral-200 hover:underline flex align-middle relative py-1 px-2 m-1"
-								>
-									{name}
-								</Link>
-							);
-						})}
+						{Object.entries(navItems).map(
+							([path, { name, hideOnMobile = false }]) => {
+								return (
+									<Link
+										key={path}
+										href={path}
+										className={cn(
+											"transition-all text-sm md:text-base hover:text-neutral-800 dark:hover:text-neutral-200 hover:underline flex align-middle relative py-1 px-2 m-1",
+											hideOnMobile && "hidden md:block",
+										)}
+									>
+										{name}
+									</Link>
+								);
+							},
+						)}
 						<ThemeSwitch />
 					</div>
 				</div>

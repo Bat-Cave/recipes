@@ -145,7 +145,7 @@
 		@apply border-green-700 border bg-gradient-to-b from-white from-10% via-green-200 via-90% to-green-200 text-green-600 after:shadow-green-400;
 	}
 	.btn-outline-warning {
-		@apply border-amber-700 border bg-gradient-to-b from-white from-10% via-amber-200 via-90% to-amber-200 text-amber-600 after:shadow-amber-400;
+		@apply border-amber-700 border bg-gradient-to-b from-white from-10% via-amber-50 via-90% to-amber-50 text-amber-600 after:shadow-amber-400;
 	}
 	.btn-outline-destructive {
 		@apply border-red-700 border bg-gradient-to-b from-white from-10% via-red-200 via-90% to-red-200 text-red-600 after:shadow-red-400;
@@ -300,7 +300,7 @@
 }
 
 .prose strong {
-	@apply font-semibold text-violet-800 dark:text-violet-400;
+	@apply font-semibold text-fuchsia-800 dark:text-fuchsia-400;
 }
 
 .prose ul {
@@ -351,4 +351,32 @@ table {
 
 .input {
 	@apply rounded px-2;
+}
+
+.collapsible-content {
+	overflow: hidden;
+}
+.collapsible-content[data-state="open"] {
+	animation: slideDown 300ms ease-out;
+}
+.collapsible-content[data-state="closed"] {
+	animation: slideUp 300ms ease-out;
+}
+
+@keyframes slideDown {
+	from {
+		height: 0;
+	}
+	to {
+		height: var(--radix-collapsible-content-height);
+	}
+}
+
+@keyframes slideUp {
+	from {
+		height: var(--radix-collapsible-content-height);
+	}
+	to {
+		height: 0;
+	}
 }
