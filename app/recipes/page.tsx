@@ -1,28 +1,50 @@
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { categories } from "./[category]/categories";
-import { getRecipes } from "./utils";
+import { categoryBackgrounds, getRecipes } from "./utils";
 
 export default function RecipesPage() {
 	const recipes = getRecipes();
 
-	console.log({ recipes });
-
 	return (
 		<section className="max-w-xl mx-auto w-full">
-			<h1>Recipe Categories</h1>
+			<h1 className="title font-semibold text-2xl tracking-tighter mt-4 mb-8">
+				Recipe Categories
+			</h1>
 			<ul>
-				{categories.map((category) => {
-					const recipeCount = recipes.filter(
-						(recipe) => recipe.metadata.category === category.slug,
-					).length;
-					return (
-						<li key={category.slug}>
-							<Link href={`/recipes/${category.slug}`}>
-								{category.name} ({recipeCount})
-							</Link>
-						</li>
-					);
-				})}
+				{[...categories]
+					.sort((a, b) => a.name.localeCompare(b.name))
+					.map((category) => {
+						const recipeCount = recipes.filter(
+							(recipe) => recipe.metadata.category === category.slug,
+						).length;
+						if (recipeCount === 0) return null;
+						return (
+							<li key={category.slug}>
+								<Link
+									href={`/recipes/${category.slug}`}
+									className="text-xl font-medium flex items-center gap-4 group"
+								>
+									<span className="inline-flex size-8 rounded-full overflow-hidden items-center justify-center">
+										<span
+											style={{ backgroundSize: "50%" }}
+											className={cn(
+												"size-full flex bg-center",
+												categoryBackgrounds[category.slug],
+											)}
+										/>
+									</span>
+									<span className="group-hover:underline">
+										{category.name}{" "}
+									</span>
+									<Badge className="text-sm bg-violet-800 dark:bg-violet-400">
+										{recipeCount} recipe{recipeCount === 1 ? "" : "s"}
+									</Badge>
+								</Link>
+							</li>
+						);
+					})}
 			</ul>
 		</section>
 	);

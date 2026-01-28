@@ -5,9 +5,12 @@ import { CategorySlug } from "./[category]/categories";
 interface Metadata {
 	title: string;
 	publishedAt: string;
-	summary: string;
-	image?: string;
-	category?: CategorySlug;
+	category: CategorySlug;
+	servings?: number;
+	servingUnits?: [string, string];
+	acknowledgments?: string[];
+	prepTime?: string;
+	cookTime?: string;
 }
 
 function parseFrontmatter(fileContent: string) {
@@ -16,17 +19,44 @@ function parseFrontmatter(fileContent: string) {
 	const frontMatterBlock = match?.[1] ?? "";
 	const content = fileContent.replace(frontmatterRegex, "").trim();
 	const frontMatterLines = frontMatterBlock.trim().split("\n");
-	const metadata: Partial<Metadata> = {};
+	const metadata: Metadata = {
+		title: "",
+		publishedAt: "",
+		category: "extras",
+		servings: 1,
+		servingUnits: ["serving", "servings"],
+		acknowledgments: [],
+		prepTime: "",
+		cookTime: "",
+	};
 
 	frontMatterLines.forEach((line) => {
 		const [key, ...valueArr] = line.split(": ");
 		let value = valueArr.join(": ").trim();
 		value = value.replace(/^['"](.*)['"]$/, "$1"); // Remove quotes
 		const trimmedKey = key.trim() as keyof Metadata;
-		if (trimmedKey === "category") {
+		if (!trimmedKey || !value) return;
+
+		// Handle type conversion based on the field type
+		if (trimmedKey === "servings") {
+			metadata.servings = Number(value);
+		} else if (trimmedKey === "servingUnits") {
+			metadata.servingUnits = value.split(",").map((item) => item.trim()) as [
+				string,
+				string,
+			];
+		} else if (trimmedKey === "category") {
 			metadata.category = value as CategorySlug;
-		} else {
-			metadata[trimmedKey] = value as Metadata[keyof Metadata];
+		} else if (trimmedKey === "title") {
+			metadata.title = value;
+		} else if (trimmedKey === "publishedAt") {
+			metadata.publishedAt = value;
+		} else if (trimmedKey === "acknowledgments") {
+			metadata.acknowledgments = value.split(",").map((item) => item.trim());
+		} else if (trimmedKey === "prepTime") {
+			metadata.prepTime = value;
+		} else if (trimmedKey === "cookTime") {
+			metadata.cookTime = value;
 		}
 	});
 
@@ -106,3 +136,15 @@ export function formatDate(date?: string, includeRelative = false) {
 
 	return `${fullDate} (${formattedDate})`;
 }
+
+export const categoryBackgrounds: Record<CategorySlug, string> = {
+	breads: "custom-bg-1",
+	cookies: "custom-bg-2",
+	desserts: "custom-bg-3",
+	extras: "custom-bg-4",
+	"main-dishes": "custom-bg-5",
+	"veggie-dishes": "custom-bg-6",
+	appetizers: "custom-bg-7",
+	"drinks-sauces": "custom-bg-8",
+	"soups-salads": "custom-bg-9",
+};

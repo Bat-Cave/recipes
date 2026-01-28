@@ -1,13 +1,15 @@
-import { notFound } from "next/navigation";
-import { categories } from "./categories";
-import { getRecipes } from "../utils";
-import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { categoryBackgrounds, getRecipes } from "../utils";
+import { CategorySlug, categories } from "./categories";
 
 export default async function RecipeCategoriesPage({
 	params,
 }: {
-	params: Promise<{ category: string }>;
+	params: Promise<{ category: CategorySlug }>;
 }) {
 	const { category } = await params;
 
@@ -18,8 +20,6 @@ export default async function RecipeCategoriesPage({
 	}
 	const recipes = getRecipes(validCategory.slug);
 
-	console.log({ recipes });
-
 	return (
 		<section className="max-w-xl mx-auto w-full">
 			<Link
@@ -27,22 +27,54 @@ export default async function RecipeCategoriesPage({
 				className="flex items-center gap-2 hover:underline"
 			>
 				<ArrowLeft />
-				<span>Back to all categories</span>
+				<span>
+					Back to{" "}
+					<span className="font-semibold text-violet-800 dark:text-violet-400">
+						All Categories
+					</span>
+				</span>
 			</Link>
-			<h1 className="title font-semibold text-2xl tracking-tighter mt-4">
+			<h1 className="title font-semibold text-2xl tracking-tighter mt-4 flex items-center gap-2 mb-8">
+				<span className="inline-flex size-8 rounded-full overflow-hidden items-center justify-center">
+					<span
+						style={{ backgroundSize: "50%" }}
+						className={cn(
+							"size-full flex bg-center",
+							categoryBackgrounds[category],
+						)}
+					/>
+				</span>
 				{validCategory.name}
+				<Badge className="text-sm bg-violet-800 dark:bg-violet-400 ml-4">
+					{recipes.length} recipe{recipes.length === 1 ? "" : "s"}
+				</Badge>
 			</h1>
-			<div className="flex justify-between items-center mt-2 mb-8 text-sm">
-				{recipes.length} recipe{recipes.length === 1 ? "" : "s"}
-			</div>
 			<ul>
-				{recipes.map((recipe) => (
-					<li key={recipe.slug}>
-						<Link href={`/recipes/${category}/${recipe.slug}`} className="hover:underline">
-							{recipe.metadata.title}
-						</Link>
-					</li>
-				))}
+				{recipes
+					.sort((a, b) => a.metadata.title.localeCompare(b.metadata.title))
+					.map(({ slug, metadata }) => (
+						<li key={slug} className="flex flex-col">
+							<Link href={`/recipes/${category}/${slug}`} className="group">
+								<span className="font-semibold text-lg group-hover:underline">
+									{metadata.title}
+								</span>
+								<span className="text-sm text-neutral-800 dark:text-neutral-300 ml-2">
+									{metadata.servings}{" "}
+									{
+										metadata?.servingUnits?.[
+											metadata?.servings && metadata?.servings > 1 ? 1 : 0
+										]
+									}
+									{"  •  "}
+									{metadata.prepTime} min prep, {metadata.cookTime} min cook
+									{"  •  "}
+									<span className="italic font-semibold">
+										{metadata.acknowledgments?.join(", ")}
+									</span>
+								</span>
+							</Link>
+						</li>
+					))}
 			</ul>
 		</section>
 	);

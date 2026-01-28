@@ -1,7 +1,19 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { formatDate, getRecipes } from "../../utils";
+import {
+	Ingredients,
+	ReactiveIngredient,
+	ReactiveServings,
+} from "@/components/ingredients";
+import { CustomMDX } from "@/components/mdx";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import Video from "@/components/video";
+import { getRecipes } from "../../utils";
 import { CategorySlug, categories } from "../categories";
 
 export default async function RecipePage({
@@ -21,8 +33,6 @@ export default async function RecipePage({
 		return notFound();
 	}
 
-	console.log({ recipe });
-
 	return (
 		<section className="max-w-xl mx-auto w-full">
 			<Link
@@ -30,18 +40,26 @@ export default async function RecipePage({
 				className="flex items-center gap-2 hover:underline"
 			>
 				<ArrowLeft />
-				<span>Back to {validCategory.name}</span>
+				<span>
+					Back to{" "}
+					<span className="font-semibold text-violet-800 dark:text-violet-400">
+						{validCategory.name}
+					</span>
+				</span>
 			</Link>
-			<h1 className="title font-semibold text-2xl tracking-tighter mt-4">
-				{recipe.metadata.title}
-			</h1>
-			<div className="flex justify-between items-center mt-2 mb-8 text-sm">
-				<p className="text-sm text-neutral-600 dark:text-neutral-400">
-					{formatDate(recipe.metadata.publishedAt)}
-				</p>
-			</div>
 			<article className="prose">
-				{/* <CustomMDX source={post.content} /> */}
+				<CustomMDX
+					source={recipe.content}
+					components={{
+						Ingredients,
+						ReactiveIngredient,
+						ReactiveServings,
+						Video,
+						Collapsible,
+						CollapsibleTrigger,
+						CollapsibleContent,
+					}}
+				/>
 			</article>
 		</section>
 	);

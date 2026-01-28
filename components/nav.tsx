@@ -1,15 +1,18 @@
 "use client";
 
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
-import { useTheme } from "next-themes";
 import Link from "next/link";
+import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
 import Logo from "./logo";
 import ThemeSwitch from "./theme-switcher";
-import { cn } from "@/lib/utils";
 
 const navItems = {
-	recipes: {
+	"/recipes": {
 		name: "Recipes",
+	},
+	"/#acknowledgments": {
+		name: "Acknowledgments",
 	},
 };
 
@@ -53,7 +56,7 @@ export function Navbar() {
 								<Link
 									key={path}
 									href={path}
-									className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 hover:underline flex align-middle relative py-1 px-2 m-1"
+									className="transition-all text-sm md:text-base hover:text-neutral-800 dark:hover:text-neutral-200 hover:underline flex align-middle relative py-1 px-2 m-1"
 								>
 									{name}
 								</Link>

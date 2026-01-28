@@ -152,7 +152,7 @@ export default function RootLayout({
 								</svg>
 							</div>
 							<div className="relative z-10 w-full">
-								<main className="min-w-0 min-h-screen flex flex-col px-2 md:px-0 mx-4 lg:mx-auto pt-12">
+								<main className="min-w-0 min-h-screen flex flex-col px-2 md:px-0 mx-2 lg:mx-auto pt-12">
 									<Navbar />
 									{children}
 									<Footer />

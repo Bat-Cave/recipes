@@ -1,3 +1,4 @@
+import { withNextVideo } from "next-video/process";
 import createMDX from "@next/mdx";
 
 /** @type {import('next').NextConfig} */
@@ -12,4 +13,4 @@ const withMDX = createMDX({
 });
 
 // Merge MDX config with Next.js config
-export default withMDX(nextConfig);
+export default withNextVideo(withMDX(nextConfig));
