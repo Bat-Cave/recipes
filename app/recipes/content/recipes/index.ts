@@ -12,6 +12,7 @@ import { recipe as khorasanWhiteLoaf } from "./khorasan-white-loaf";
 import { recipe as koreanGroundBeefRiceBowls } from "./korean-ground-beef-rice-bowls";
 import { recipe as salsa } from "./salsa";
 import { recipe as stirFrySauce } from "./stir-fry-sauce";
+import { recipe as strawberryCakeFilling } from "./strawberry-cake-filling";
 
 export const allRecipes: Recipe[] = [
 	basicBread,
@@ -27,4 +28,5 @@ export const allRecipes: Recipe[] = [
 	stirFrySauce,
 	khorasanWhiteLoaf,
 	koreanGroundBeefRiceBowls,
+	strawberryCakeFilling,
 ];
